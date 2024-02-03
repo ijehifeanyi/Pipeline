@@ -1,0 +1,84 @@
+Vagrant.configure("2") do |config|
+    config.hostmanager.enabled = true 
+    config.hostmanager.manage_host = true
+    config.hostmanager.manage_guest = true
+ 
+    config.vm.define "jenkins" do |jenkins|
+      jenkins.vm.box = "ubuntu/focal64"
+      jenkins.vm.hostname = "jenkins"
+      jenkins.vm.network "private_network", ip: "192.168.56.15"
+      jenkins.vm.provider "virtualbox" do |vb|
+       vb.memory = "2040"
+     end
+     # jenkins.vm.provision "shell", path: "mysql.sh"  
+  
+    end
+    
+ 
+    config.vm.define "nexus" do |nexus|
+      nexus.vm.box = "ubuntu/focal64"
+      nexus.vm.hostname = "nexus"
+      nexus.vm.network "private_network", ip: "192.168.56.14"
+      nexus.vm.provider "virtualbox" do |vb|
+       vb.memory = "2040"
+      end
+    # nexus.vm.provision "shell", path: "memcache.sh"  
+    end
+    
+  
+    config.vm.define "sonarqube" do |sonarqube|
+      sonarqube.vm.box = "ubuntu/focal64"
+      sonarqube.vm.hostname = "sonarqube"
+      sonarqube.vm.network "private_network", ip: "192.168.56.16"
+      sonarqube.vm.provider "virtualbox" do |vb|
+       vb.memory = "2040"
+      end
+     # sonarqube.vm.provision "shell", path: "rabbitmq.sh"  
+    end
+    
+
+     config.vm.define "kubemaster" do |kubemaster|
+      kubemaster.vm.box = "ubuntu/focal64"
+      kubemaster.vm.hostname = "kubemaster"
+      kubemaster.vm.network "private_network", ip: "192.168.56.12"
+      kubemaster.vm.provider "virtualbox" do |vb|
+       vb.memory = "4000"
+     end
+    end
+
+    config.vm.define "node1" do |node1|
+      node1.vm.box = "ubuntu/focal64"
+      node1.vm.hostname = "node1"
+      node1.vm.network "private_network", ip: "192.168.56.17"
+      node1.vm.provider "virtualbox" do |vb|
+       vb.memory = "4000"
+     end
+    end
+
+    config.vm.define "node2" do |node2|
+      node2.vm.box = "ubuntu/focal64"
+      node2.vm.hostname = "node2"
+      node2.vm.network "private_network", ip: "192.168.56.18"
+      node2.vm.provider "virtualbox" do |vb|
+       vb.memory = "2040"
+     end
+    end
+    
+end    
+
+
+=begin
+  ### Nginx VM ###
+    config.vm.define "web01" do |web01|
+      web01.vm.box = "ubuntu/jammy64"
+      web01.vm.hostname = "web01"
+    web01.vm.network "private_network", ip: "192.168.56.11"
+  #  web01.vm.network "public_network"
+    web01.vm.provider "virtualbox" do |vb|
+       vb.gui = true
+       vb.memory = "800"
+     end
+    web01.vm.provision "shell", path: "nginx.sh"  
+  end
+=end
+  
