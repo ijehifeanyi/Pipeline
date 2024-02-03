@@ -156,7 +156,7 @@ pipeline {
           }
         }
 
-        /*
+        
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
@@ -166,9 +166,10 @@ pipeline {
         }
 
        //stage("Kubernetes Deployment")
+    */
     }
 
-    */
+    
     post {
         always {
             echo 'Slack Notifications.'
