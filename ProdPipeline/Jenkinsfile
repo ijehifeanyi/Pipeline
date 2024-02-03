@@ -109,7 +109,7 @@ pipeline {
             }
         }
 
-        
+        /*
         stage('Build Docker Image') {
             steps {
                 script {
@@ -119,13 +119,14 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Tag') {
             steps {
                 sh 'docker tag java-app ijehifeanyi/app:latest'
             }
         }
         
+
         
         stage('Push') {
             steps {
@@ -135,8 +136,27 @@ pipeline {
                 }
             }
         }
-     
-             
+        */
+         stage('Build App Image') {
+            steps {
+                script {
+                    dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
+                }
+            }
+        }
+        
+        stage('Upload App Image') {
+          steps{
+            script {
+              docker.withRegistry( vprofileRegistry, registryCredential ) {
+                dockerImage.push("$BUILD_NUMBER")
+                dockerImage.push('latest')
+              }
+            }
+          }
+        }
+
+        /*
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
@@ -147,6 +167,7 @@ pipeline {
 
        //stage("Kubernetes Deployment")
     }
+    */
     post {
         always {
             echo 'Slack Notifications.'
